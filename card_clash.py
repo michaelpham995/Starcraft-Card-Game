@@ -1,13 +1,14 @@
 import random
 
 class Card:
-    def __init__(self, name, attack, health, defense, cost):
+    def __init__(self, name, attack, health, defense, cost, unit_count):
         self.name = name
         self.attack = attack
         self.health = health
         self.defense = defense
         self.cost = cost
-
+        self.unit_count = unit_count
+        
     def __str__(self):
         return f"{self.name}: Attack={self.attack}, Defense={self.defense}"
 
