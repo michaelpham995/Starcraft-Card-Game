@@ -1,12 +1,13 @@
 import random
 
 class Card:
-    def __init__(self, name, attack, health, defense, cost):
+    def __init__(self, name, attack, health, defense, cost, unit_count):
         self.name = name
         self.attack = attack
         self.health = health
         self.defense = defense
         self.cost = cost
+        self.unit_count = unit_count
 
     def __str__(self):
         return f"{self.name}: Attack={self.attack}, Defense={self.defense}"
@@ -86,9 +87,9 @@ def card_clash(p1, p2):
 #zerg_cards = [Card("Zergling", 5, 5, 20)]
 #terran_cards = [Card("Tank", 50, 25, 200)]
 
-protoss_cards = [Card("Zealot", 19, 100, 1, 100), Card("Stalker", 10, 160, 1, 125), Card("High Templar", 4, 80, 1, 150), Card("Immortal", 20, 300, 1, 275), Card("Colossus", 10, 350, 1, 350), Card("Void Ray", 17, 250, 0, 250), Card("Carrier", 40, 450, 2, 500)]
-zerg_cards = [Card("Zergling", 10, 35, 0, 25), Card("Baneling", 25, 35, 0, 50), Card("Roach",11, 145, 1, 75), Card("Hydralisk", 20, 90, 0, 100), Card("Ravager", 14, 120, 1, 125), Card("Mutalisk", 12, 120, 0, 150)]
-terran_cards = [Card("Marine", 11, 45, 0, 50), Card("Marauder", 9, 125, 1, 100), Card("Hellion", 5, 90, 0, 100), Card("Siege Tank", 20, 175, 1, 150), Card("Thor", 60, 400, 1, 450), Card("Medivac", 0, 150, 0, 100), Card("Viking", 15, 135, 0, 150), Card("Battlecrusier", 45, 550, 3, 550)]
+protoss_cards = [Card("Zealot", 19, 100, 1, 100, 1), Card("Stalker", 10, 160, 1, 125, 1), Card("High Templar", 4, 80, 1, 150, 1), Card("Immortal", 20, 300, 1, 275, 1), Card("Colossus", 10, 350, 1, 350, 1), Card("Void Ray", 17, 250, 0, 250, 1), Card("Carrier", 40, 450, 2, 500, 1)]
+zerg_cards = [Card("Zergling", 10, 35, 0, 25, 1), Card("Baneling", 25, 35, 0, 50, 1), Card("Roach",11, 145, 1, 75, 1), Card("Hydralisk", 20, 90, 0, 100, 1), Card("Ravager", 14, 120, 1, 125, 1), Card("Mutalisk", 12, 120, 0, 150, 1)]
+terran_cards = [Card("Marine", 11, 45, 0, 50, 1), Card("Marauder", 9, 125, 1, 100, 1), Card("Hellion", 5, 90, 0, 100, 1), Card("Siege Tank", 20, 175, 1, 150, 1), Card("Thor", 60, 400, 1, 450, 1), Card("Medivac", 0, 150, 0, 100, 1), Card("Viking", 15, 135, 0, 150, 1), Card("Battlecrusier", 45, 550, 3, 550, 1)]
 
 protoss_deck = Deck(protoss_cards * 8)
 zerg_deck = Deck(zerg_cards * 8)
