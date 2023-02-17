@@ -42,6 +42,17 @@ class Player:
     def play_card(self, card):
         self.field.append(card)
 
+    #Buy Card method - MICHAEL EDIT 2/15
+    def buy_troops(self, card_index):
+        if self.minerals < self.deck.cards[card_index].cost:
+            print(f"{self.name} does not have enough minerals to buy this card.")
+            return
+        self.minerals -= self.deck.cards[card_index].cost
+        self.hand.append(self.deck.cards[card_index])
+        self.deck.cards.pop(card_index)
+        print(f"{self.name} buys {self.hand[-1].name} for {self.hand[-1].cost} minerals.")
+
+
 
 def card_clash(p1, p2):
     while True:
@@ -95,6 +106,16 @@ protoss_deck = Deck(protoss_cards * 8)
 zerg_deck = Deck(zerg_cards * 8)
 terran_deck = Deck(terran_cards * 8)
 
+
+#I think we should store troops on map based on dictionary, EDITED by Michael think of it like bwlo
+# player1_dict = {"Zealot" : [[2, 2], [10, 160, 1, 125, 1]}
+# The first list in the value slot are the coordinates for where the troop is on the map!
+
+player1_troop_dict = {}
+player2_troop_dict = {}
+
+
+
 choices = {"protoss": protoss_deck, "zerg": zerg_deck, "terran": terran_deck}
 
 p1_choice = None
@@ -116,4 +137,43 @@ p1 = Player("Stefan", p1_choice, 500, 1000)
 p2 = Player("Matthew", p2_choice, 500, 1000)
 
 
-winner = card_clash(p1, p2)
+#winner = card_clash(p1, p2)
+
+
+
+
+
+
+#Michael 2/15 EDIT
+#Build grid functions/establish map capability with the functions below
+def get_game_grid():
+    map_array = [[100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, -1, 0, 0, 0, 0, -1, 0, 100]
+    ,[100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100]
+    , [100, 0, -1, 0, 0, 0, 0, -1, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100]]
+    #-1s we can build command centers on and will also signify mineral fields (will be command centers on mineral fields for ease)
+
+    return map_array
+
+def check_build_noncommand_structures(map_array, xcoord, ycoord):
+    return (map_array[xcoord - 1][ycoord] == 75 or map_array[xcoord + 1][ycoord] == 75 or map_array[xcoord][ycoord - 1] == 75 or map_array[xcoord][ycoord + 1] == 75)
+    #Assuming that command center built at new base health is 75 and other new base buildings will be 50
+
+def check_build_command_structure(map_array, xcoord, ycoord):
+    return map_array[xcoord][ycoord] == -1
+    #-1 is the placeholder for new base structures
+
+def check_home_base_build_structure(map_array, xcoord, ycoord):
+    return map_array[xcoord][ycoord] == -2
+    #-2 will be placeholderr for starting base structures that are destroyed
+
+
+#Allows player to buy troops below 
+def buy_troops(player, playerdict, deck, buy_more):
+    #This is psuedo input below for player to choose what to buy
+    while buy_more == True:
+        troop = input("Please select the troop you would like to buy")
+        
+
+    
+
+print(get_game_grid())
