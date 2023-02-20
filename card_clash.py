@@ -106,7 +106,6 @@ protoss_deck = Deck(protoss_cards * 8)
 zerg_deck = Deck(zerg_cards * 8)
 terran_deck = Deck(terran_cards * 8)
 
-
 #I think we should store troops on map based on dictionary, EDITED by Michael think of it like bwlo
 # player1_dict = {"Zealot" : [[2, 2], [10, 160, 1, 125, 1]}
 # The first list in the value slot are the coordinates for where the troop is on the map!
