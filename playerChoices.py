@@ -1,16 +1,18 @@
 #This file will be the player buying stuff and moving troops
 
-from mapChecker import get_game_grid, check_build_noncommand_structures, check_build_command_structure, check_home_base_build_structure, check_player_troops
+from mapChecker import get_game_grid, unit_map, check_build_noncommand_structures, check_build_command_structure, check_home_base_build_structure, check_player_troops
+from resourceChecker import check_enough_minerals, check_enough_space
+from battles import is_there_conflicft
 
 def main():
     #Below are the card decks players will be able to select from 
-    protoss_cards = [("Zealot", 19, 100, 1, 100, 1), ("Stalker", 10, 160, 1, 125, 1), ("High Templar", 4, 80, 1, 150, 1), ("Immortal", 20, 300, 1, 275, 1), ("Colossus", 10, 350, 1, 350, 1), ("Void Ray", 17, 250, 0, 250, 1), ("Carrier", 40, 450, 2, 500, 1)]
-    zerg_cards = [("Zergling", 10, 35, 0, 25, 1), ("Baneling", 25, 35, 0, 50, 1), ("Roach",11, 145, 1, 75, 1), ("Hydralisk", 20, 90, 0, 100, 1), ("Ravager", 14, 120, 1, 125, 1), ("Mutalisk", 12, 120, 0, 150, 1)]
-    terran_cards = [("Marine", 11, 45, 0, 50, 1), ("Marauder", 9, 125, 1, 100, 1), ("Hellion", 5, 90, 0, 100, 1), ("Siege Tank", 20, 175, 1, 150, 1), ("Thor", 60, 400, 1, 450, 1), ("Medivac", 0, 150, 0, 100, 1), ("Viking", 15, 135, 0, 150, 1), ("Battlecrusier", 45, 550, 3, 550, 1)]
+    protoss_cards = [["Zealot", 19, 100, 100, 1], ["Stalker", 10, 160, 125, 1], ["High Templar", 4, 80, 150, 1], ["Immortal", 20, 300, 275, 1], ["Colossus", 10, 350, 350, 1], ["Void Ray", 17, 250, 250, 1], ["Carrier", 40, 450, 500, 1]]
+    zerg_cards = [["Zergling", 10, 35, 25, 1], ["Baneling", 25, 35, 50, 1], ["Roach",11, 145, 75, 1], ["Hydralisk", 20, 90, 100, 1], ["Ravager", 14, 120, 125, 1], ["Mutalisk", 12, 120, 150, 1]]
+    terran_cards = [["Marine", 11, 45, 50, 1], ["Marauder", 9, 125, 100, 1], ["Hellion", 5, 90, 100, 1], ["Siege Tank", 20, 175, 150, 1], ["Thor", 60, 400, 450, 1], ["Medivac", 0, 150, 100, 1], ["Viking", 15, 135, 150, 1], ["Battlecrusier", 45, 550, 550, 1]]
 
     #Below initializes the troop map setup
-    player1_troops = [[0]] * 100
-    player2_troops = [[0]] * 100
+    player1_troops = unit_map()
+    player2_troops = unit_map()
 
     print(player1_troops)
 
@@ -77,19 +79,70 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         # [2][0] and [3][0] and [4][0] and [6][0] and [7][0] are just command center like buildings
         # [8][0] and [9][0] are for troops
 
-        player_turn(player1_config, p1_choice, player1_troops, game_map)
-        player_turn(player2_config, p2_choice, player2_troops, game_map)
+        #Here players recruit troops
+        newTroops_player1 = player_turn(player1_config, p1_choice, player1_troops, game_map)
+        newtroops_player2 = player_turn(player2_config, p2_choice, player2_troops, game_map)
 
-        def player_turn(player_config, race_choice, players_troops, game_map):
+        #Here we add to troops to each of the players barracks that have been recruited
+        add_troops_to_map(player1_troops, newTroops_player1, "P1")
+        add_troops_to_map(player2_troops, newtroops_player2, "P2")
+
+        #Here we go to the battles.py file and see if there are any conflicts
+        is_there_conflicft(player1_troops, player2_config)
+
+        def player_turn(player_config, race_choice):
             print(player_config[0] + "currently you have" + str(player_config[1]) + "minerals and have room to build" + str(player_config[2]) + "more troops!")
 
             #Create a temporary list to keep track of troops player would like to buy this turn
             buy_troops = []
 
+            #Remember: The order of a units attributes are the following
+            #   Name
+            #   Attack
+            #   Health
+            #   Cost
+            #   Unit Cost
             continue_buy = "yes"
             while continue_buy == "yes":
                 
+                print(race_choice)
+                choose_unit = int(input("Type index of unit that you want to recruit!"))
+                
+                if check_enough_minerals(player_config, race_choice, choose_unit) and check_enough_space(player_config, race_choice, choose_unit):
+                    buy_troops.append(race_choice[choose_unit])
+                    #Reduce minerals
+                    player_config[1] -= race_choice[choose_unit][3]
+                    #Reduce remaining player space
+                    player_config[2] -= race_choice[choose_unit][4]
+            
+                elif check_enough_minerals(player_config, race_choice, choose_unit) and not check_enough_space(player_config, race_choice, choose_unit):
+                    print("You do not have enough remaining army space to purchase this unit")
+                elif check_enough_space(player_config, race_choice, choose_unit) and not check_enough_minerals(player_config, race_choice, choose_unit):
+                    print("You do not havce enough minerals to purchase this unit")
+                else:
+                    print("You do not have enough minerals to purchase this unit and you do not have enough remaining army space to purchae this unit.")
+
                 continue_buy = input("Enter 'yes' if you want to continue buying more troops")
+
+            return buy_troops
+
+        #This function adds troops to the map
+        #If there is only one troop unit recruited, they will spawn at the uppermost point in the map
+        #If there are multuple troop units recruited, half will spawn at the uppermost barracks and half at the lower barracks
+        def add_troops_to_map(new_troops, troop_map, which_player):
+            if len(new_troops) == 0:
+                return
+            elif len(new_troops) == 1 and which_player == "P1":
+                troop_map[0][0].append(new_troops)
+            elif len(new_troops) == 1 and which_player == "P2":
+                troop_map[0][-1].append(new_troops)
+            elif len(new_troops) > 1 and which_player == "P1":
+                troop_map[0][0].append(new_troops[:len(new_troops) // 2])
+                troop_map[1][0].append(new_troops[len(new_troops) // 2:])
+            elif len(new_troops) > 1 and which_player == "P2":
+                troop_map[0][-1].append(new_troops[:len(new_troops) // 2])
+                troop_map[1][-1].append(new_troops[len(new_troops) // 2:])
+            
 
 
 
