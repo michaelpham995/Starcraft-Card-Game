@@ -2,7 +2,7 @@
 
 from mapChecker import get_game_grid, unit_map, check_build_noncommand_structures, check_build_command_structure, check_home_base_build_structure, check_player_troops
 from resourceChecker import check_enough_minerals, check_enough_space
-from battles import is_there_conflicft
+from battles import is_there_conflict
 
 def main():
     #Below are the card decks players will be able to select from 
@@ -88,7 +88,7 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         add_troops_to_map(player2_troops, newtroops_player2, "P2")
 
         #Here we go to the battles.py file and see if there are any conflicts
-        is_there_conflicft(player1_troops, player2_config)
+        conflict_spots = is_there_conflict(player1_troops, player2_troops)
 
         def player_turn(player_config, race_choice):
             print(player_config[0] + "currently you have" + str(player_config[1]) + "minerals and have room to build" + str(player_config[2]) + "more troops!")
