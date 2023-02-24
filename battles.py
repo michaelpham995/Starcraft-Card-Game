@@ -36,6 +36,8 @@ def fight(a1_present, a2_present, a1, a2):
     #We want to return an updated version of a1_present and a2_present
     #The goal them is we will call the update_army function from the battle function to update the army
 
+
+#This function will update the army on teh squares where battles occured - One will stand, one will fall 
 def update_army():
     return
 
