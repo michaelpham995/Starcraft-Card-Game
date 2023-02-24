@@ -2,7 +2,7 @@
 
 from mapChecker import get_game_grid, unit_map, check_build_noncommand_structures, check_build_command_structure, check_home_base_build_structure, check_player_troops
 from resourceChecker import check_enough_minerals, check_enough_space
-from battles import is_there_conflict
+from battles import is_there_conflict, battle
 
 def main():
     #Below are the card decks players will be able to select from 
@@ -87,8 +87,21 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         add_troops_to_map(player1_troops, newTroops_player1, "P1")
         add_troops_to_map(player2_troops, newtroops_player2, "P2")
 
+
+
+
         #Here we go to the battles.py file and see if there are any conflicts
         conflict_spots = is_there_conflict(player1_troops, player2_troops)
+
+        for coords in conflict_spots:
+            settle_battle = battle(player1_troops, player2_troops, coords)
+
+        #Here we add the players troops by 1 unit for each turn 
+        move_troops(player1_troops, 1)
+        move_troops(player2_troops, 1)
+
+
+
 
         def player_turn(player_config, race_choice):
             print(player_config[0] + "currently you have" + str(player_config[1]) + "minerals and have room to build" + str(player_config[2]) + "more troops!")
@@ -133,15 +146,90 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
             if len(new_troops) == 0:
                 return
             elif len(new_troops) == 1 and which_player == "P1":
+                for troop in new_troops:
+                    troop.append(0)
+                    troop.append(0)
+                    troop.append(0)
+                    troop.append(0)
                 troop_map[0][0].append(new_troops)
             elif len(new_troops) == 1 and which_player == "P2":
+                for troop in new_troops:
+                    troop.append(0)
+                    troop.append(-1)
+                    troop.append(0)
+                    troop.append(-1)
+
+
                 troop_map[0][-1].append(new_troops)
             elif len(new_troops) > 1 and which_player == "P1":
+
+                #here we are adding the troops current location in the 5th/6th index of the troop unit in the list of army
+                #Here we are also adding the 7th/8th index to be the target location of the unit
+
+                low, high = 0, len(new_troops)
+                mid = (low + high) // 2
+                for troop in range(low, mid + 1):
+                    troop_map[troop].append(0)
+                    troop_map[troop].append(0)
+                    troop_map[troop].append(0)
+                    troop_map[troop].append(0)
+
+                for troop in range(mid + 1, high):
+                    troop_map[troop].append(1)
+                    troop_map[troop].append(0)
+                    troop_map[troop].append(1)
+                    troop_map[troop].append(0)
+
                 troop_map[0][0].append(new_troops[:len(new_troops) // 2])
                 troop_map[1][0].append(new_troops[len(new_troops) // 2:])
+
+
             elif len(new_troops) > 1 and which_player == "P2":
+                low, high = 0, len(new_troops)
+                mid = (low + high) // 2
+                for troop in range(low, mid + 1):
+                    troop_map[troop].append(0)
+                    troop_map[troop].append(-1)
+                    troop_map[troop].append(0)
+                    troop_map[troop].append(-1)
+
+                for troop in range(mid + 1, high):
+                    troop_map[troop].append(1)
+                    troop_map[troop].append(-1)
+                    troop_map[troop].append(1)
+                    troop_map[troop].append(-1)
+
                 troop_map[0][-1].append(new_troops[:len(new_troops) // 2])
                 troop_map[1][-1].append(new_troops[len(new_troops) // 2:])
+
+
+
+        def move_troops(player_army):
+            for unit in player_army:
+                if unit[-2][0] != unit[-1][0] or unit[-2][1] != unit[-1][1]:
+                    xdiff = unit[-1][0] - unit[-2][0]
+                    ydiff = unit[-1][1] - unit[-2][1]
+
+            if xdiff == 0 and ydiff > 0:
+                unit[-2][1] += 1
+            elif xdiff == 0 and ydiff < 0:
+                unit[-2][1] -= 1
+            elif ydiff == 0 and xdiff > 0:
+                unit[-2][0] += 1
+            elif ydiff == 0 and xdiff < 0:
+                unit[-2][0] -= 1
+            elif ydiff > 0 and xdiff > 0:
+                unit[-2][0] += 1
+                unit[-2][1] += 1
+            elif ydiff > 0 and xdiff < 0:
+                unit[-2][0] -= 1
+                unit[-2][1] += 1
+            elif ydiff < 0 and xdiff > 0:
+                unit[-2][0] += 1
+                unit[-2][1] -= 1
+            elif ydiff < 0 and xdiff < 0:
+                unit[-2][0] -= 1
+                unit[-2][1] -= 1
             
 
 
