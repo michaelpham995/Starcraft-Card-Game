@@ -20,11 +20,7 @@ def check_home_base_build_structure(map_array, xcoord, ycoord):
     return map_array[xcoord][ycoord] == -2
     #-2 will be placeholderr for starting base structures that are destroyed
 
-
-def unit_map():
-    troop_map = [[0] * 10] * 10
-    return troop_map
-
+    
 
 #Unfinished function
 def check_player_troops(player1_troops, player2_troops, xcoord, ycoord):
@@ -32,5 +28,3 @@ def check_player_troops(player1_troops, player2_troops, xcoord, ycoord):
         return "The opposing player has troops here!"
     else:
         return "There are no opposing troops here!"
-    
-

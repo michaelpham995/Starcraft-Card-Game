@@ -3,10 +3,15 @@
 #This determines if the opponents have 2 armies in the same area of the map
 def is_there_conflict(p1_map, p2_map):
     conflict_squares = []
+    p1_coords, p2_coords = [], []
     for i in range(len(p1_map)):
-        for j in range(len(p1_map[0])):
-            if p1_map[i][j] != 0 and p2_map[i][j] != 0:
-                conflict_squares.append([i, j])
+        p1_coords.append([p1_map[i][5], p1_map[i][6]])
+    for i in range(len(p2_map)):
+        p2_coords.append([p2_map[i][5], p2_map[i][6]])
+
+    for location in p1_coords:
+        if location in p2_coords:
+            conflict_squares.append(location)
     return conflict_squares
 
 #This function handles battles present on the map
