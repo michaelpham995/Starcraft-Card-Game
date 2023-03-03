@@ -29,22 +29,98 @@ def battle(army1, army2, coords):
         if army2[i][5] == coords[0] and army2[i][6] == coords[1]:
             army2_present.append(army2[i])
 
+    #Sort to put lowest health troops in the coordinate first and highest last
+    army1_present.sort(key = lambda i: i[2])
+    army2_present.sort(key = lambda i: i[2])
+
     if len(army1_present) > 0 and len(army2_present) > 0:
-        a1_casulaties, a2_casulaties = fight(army1_present, army2_present, army1, army2) 
+        winner, survivors = fight(army1_present, army2_present, army1, army2) 
+
+    #Call the update_army function to update the armies for later rounds
+    if winner == "A1":
+        army1, army2 = update_army(winner, survivors, army1, army2, coords)
+    elif winner == "A2":
+        army2, army1 = update_army(winner, survivors, army1, army2, coords)
+    
+    return army1, army2
+
 
 
 #This function determine sht winners and losers of the battle
 #For now I'm playing this by a rule of the weaker troops get targeted and destroyed first
 #The fight will settle within the turn and the damages are not absolute (as troops need to be killed but) relevant to compare troop strength
 def fight(a1_present, a2_present, a1, a2):
-    return
-    #We want to return an updated version of a1_present and a2_present
-    #The goal them is we will call the update_army function from the battle function to update the army
+    a1_present_health = 0
+    a2_present_health = 0
+    a1_attack = 0
+    a2_attack = 0
+    survivors = []
+
+    for troop in a1_present:
+        a1_present_health += troop[2]
+        a1_attack += troop[1]
+
+    for troop in a2_present:
+        a2_present_health += troop[2]
+        a2_attack += troop[1]
+    
+    while a1_present_health > 0 and a2_present_health > 0:
+        a1_present_health -= a2_attack
+        a2_present_health -= a1_attack
+
+    if a1_present_health > a2_present_health:
+        winner = "A1"
+    else:
+        winner = "A2"
+
+    if winner == "A1":
+        a2 = []
+        remaining_health = a1_present_health
+        for i in reversed(a1_present):
+            remaining_health -= a1_present[i][2]
+            if a1_present_health > 0:
+                survivors.append(a1_present[i])          
+    else:
+        a1 = []
+        remaining_health = a2_present_health
+        for i in reversed(a2_present):
+            remaining_health -= a2_present[i][2]
+            if a2_present_health > 0:
+                survivors.append(a2_present[i])
+    
 
 
-#This function will update the army on teh squares where battles occured - One will stand, one will fall 
-def update_army():
-    return
+    return winner, survivors
+    #We want to return the winner and which army had survivors in it!
+
+
+#This function will update the army on th esquares where battles occured - One will stand, one will fall 
+def update_army(winner, survivors, army1, army2, coords):
+    if winner == "A1":
+        win, lose = new_placement(army1, army2, survivors, coords)
+    else:
+        win, lose = new_placement(army2, army1, survivors, coords)
+
+    #Inner function that will handle the new placements of troops
+    #Winner of coordinate will get to keep health of survivng troops
+    def new_placement(winning_army, losing_army, survivors, coords):
+        for army in range(len(losing_army)):
+            if losing_army[army][5] == coords[0] and losing_army[army][6] == coords[1]:
+                army[2] = 'dead'
+        losing_army = [x for x in losing_army if 'dead' not in x]
+
+        for army in range(len(winning_army)):
+            if winning_army[army][5] == coords[0] and winning_army[army][6] == coords[1]:
+                army[2] = 'dead'
+        winning_army = [x for x in winning_army if 'dead' not in x]
+
+        for troop in survivors:
+            winning_army.append(troop)
+
+        return winning_army, losing_army
+
+    #Return new armies
+    return win, lose
 
 
 

@@ -247,12 +247,16 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         #Here we go to the battles.py file and see if there are any conflicts
         conflict_spots = is_there_conflict(player1_troops, player2_troops)
         print(conflict_spots)
-        
+
         #If there are conflict spots the battle will be settled here
         if len(conflict_spots) > 0:
             for coords in conflict_spots:
-                settle_battle = battle(player1_troops, player2_troops, coords)
+                battle(player1_troops, player2_troops, coords)
 
+        #NEXT STEP IS TO CHECK FOR BUILDINGS BEING DESTROYED
+        #FINAL STEP IS TO GIVE ANY TROOP YOU WANT NEW TARGET COORDINATES
+
+        
         #Move troops by 1 'square' per move
         move_troops(player1_troops)
         move_troops(player2_troops)
