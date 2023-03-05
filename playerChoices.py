@@ -4,6 +4,7 @@ from mapChecker import get_game_grid, check_build_noncommand_structures, check_b
 from resourceChecker import check_enough_minerals, check_enough_space
 from battles import is_there_conflict, battle
 from moveAndPrint import choose_troop_movements, print_race
+from attackStructures import check_buildings, attack_buildings
 
 def main():
     #Below are the card decks players will be able to select from 
