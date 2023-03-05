@@ -1,10 +1,9 @@
 #Michael 2/15 EDIT
 #Build grid functions/establish map capability with the functions below
 def get_game_grid():
-    map_array = [[100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, -1, 0, 0, 0, 0, -1, 0, 100]
+    map_array = [[100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100]
     ,[100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100]
-    , [100, 0, -1, 0, 0, 0, 0, -1, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100]]
-    #-1s we can build command centers on and will also signify mineral fields (will be command centers on mineral fields for ease)
+    , [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100], [100, 0, 0, 0, 0, 0, 0, 0, 0, 100]]
 
     return map_array
 

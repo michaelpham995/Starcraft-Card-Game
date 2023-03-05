@@ -4,7 +4,7 @@ from mapChecker import get_game_grid, check_build_noncommand_structures, check_b
 from resourceChecker import check_enough_minerals, check_enough_space
 from battles import is_there_conflict, battle
 from moveAndPrint import choose_troop_movements, print_race
-from attackStructures import check_buildings, attack_buildings
+from attackStructures import check_buildings
 
 def main():
     #Below are the card decks players will be able to select from 
@@ -257,6 +257,8 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
                 battle(player1_troops, player2_troops, coords)
 
         #NEXT STEP IS TO CHECK FOR BUILDINGS BEING DESTROYED
+        check_buildings(game_map, player1_troops, "P1")
+        check_buildings(game_map, player2_troops, "P2")
 
         #This is where players choose new coordinates for troops
         choose_troop_movements(player1_troops, player1_config[0])
@@ -266,7 +268,19 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         move_troops(player1_troops)
         move_troops(player2_troops)
 
+
         #Just a test
         print(player1_troops)
-        
+    
+    
+    #Declaring winner of the game
+    if game_map[0][0] <= 0 and game_map[1][0] <= 0 and game_map[2][0] <= 0 and game_map[3][0] <= 0 and game_map[4][0] <= 0 and game_map[5][0] <= 0 and game_map[6][0] <= 0 and game_map[7][0] <= 0 and game_map[8][0] <= 0 and game_map[9][0] <= 0:
+        print(player2_config[0] + " wins!")
+    elif game_map[0][-1] <= 0 and game_map[1][-1] <= 0 and game_map[2][-1] <= 0 and game_map[3][-1] <= 0 and game_map[4][-1] <= 0 and game_map[5][-1] <= 0 and game_map[6][-1] <= 0 and game_map[7][-1] <= 0 and game_map[8][-1] <= 0 and game_map[9][-1] <= 0:
+        print(player1_config[0] + " wins!")
+    else:
+        print("Something went wrong")
+
 main()
+
+
