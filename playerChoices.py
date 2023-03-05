@@ -3,6 +3,7 @@
 from mapChecker import get_game_grid, check_build_noncommand_structures, check_build_command_structure, check_home_base_build_structure, check_player_troops
 from resourceChecker import check_enough_minerals, check_enough_space
 from battles import is_there_conflict, battle
+from moveAndPrint import choose_troop_movements, print_race
 
 def main():
     #Below are the card decks players will be able to select from 
@@ -20,8 +21,9 @@ def main():
     #Index 0 - Name
     #Index 1 - Minerals
     #Index 2 - Troops remaining
-    player1_config = ["Name", 1000, 195]
-    player2_config = ["Name", 1000, 195]
+        #I changed index 2 to 25 troops
+    player1_config = ["Name", 1000, 25]
+    player2_config = ["Name", 1000, 25]
 
     #Note troops total is 200  but players start with 5 builders each
     #Max 1 builder per command center for resource collection
@@ -37,10 +39,10 @@ def main():
     p2_choice = None
 
     #Below players input their names
-    name1 = input("Player 1 enter your name!")
+    name1 = input("Player 1 enter your name! ")
     player1_config[0] = name1
 
-    name2 = input("Player 2 enter your name!")
+    name2 = input("Player 2 enter your name! ")
     player2_config[0] = name2
 
 
@@ -69,6 +71,7 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
     turn_count = 0
 
 
+
     def player_turn(player_config, race_choice, player_choice, map):
         print(player_config[0] + ", currently you have " + str(player_config[1]) + " minerals and have room to build " + str(player_config[2]) + " more troops!")
 
@@ -86,10 +89,10 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         #   Target x axis
         #   Target y axis
 
-        continue_buy = "y"
+        continue_buy = input("Enter 'y' if you want to buy troops! ")
         while continue_buy == "y":
                 
-            print(race_choice)
+            print_race(race_choice)
             
             choose_unit = -1
 
@@ -127,7 +130,6 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
     #If there are multuple troop units recruited, half will spawn at the uppermost barracks and half at the lower barracks
 
     def add_troops_to_map(player_troops, new_troops, which_player):
-        print(new_troops)
         if len(new_troops) == 0:
             return
         elif len(new_troops) == 1 and which_player == "P1":
@@ -192,8 +194,8 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
     def move_troops(player_army):
         for unit in player_army:
             if unit[-2] != unit[-4] or unit[-1] != unit[-3]:
-                xdiff = unit[-4] - unit[-2]
-                ydiff = unit[-3] - unit[-1]
+                xdiff = unit[-2] - unit[-4]
+                ydiff = unit[-1] - unit[-3]
 
                 if xdiff == 0 and ydiff > 0:
                     unit[-3] += 1
@@ -254,14 +256,16 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
                 battle(player1_troops, player2_troops, coords)
 
         #NEXT STEP IS TO CHECK FOR BUILDINGS BEING DESTROYED
-        #FINAL STEP IS TO GIVE ANY TROOP YOU WANT NEW TARGET COORDINATES
 
-        
+        #This is where players choose new coordinates for troops
+        choose_troop_movements(player1_troops, player1_config[0])
+        choose_troop_movements(player2_troops, player2_config[0])
+
         #Move troops by 1 'square' per move
         move_troops(player1_troops)
         move_troops(player2_troops)
 
         #Just a test
-        print(player2_troops)
+        print(player1_troops)
         
 main()
