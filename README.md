@@ -31,19 +31,19 @@ For each turn the players have the ability to do the following
 
 
 ### File breakdown
-##### main.py Function
+##### main.py 
 The game runs entirely on this file and calls from functions from all other files. This contains functions to update troops and initialize player properties and race selections.
 
-##### mapChecker.py Function
+##### mapChecker.py 
 This serves to initialize the buildings on the map for each players. In addition it calculates it contributes to checking where troops are on the map for the player and checks which buildings are still functional for the player. This helps determine what they are able to do on their turn.
 
-##### moveAndPrint.py Function
+##### moveAndPrint.py 
 This file serves to produce clean output which lists a players options for recruiting troops and moving troops. It is a clean layout that improves from printing dictionaries and lists onto the output.
 
-##### resouceChecker.py Function
+##### resouceChecker.py 
 Here is where players are notified if they have available resources and unit availability to produce troops.
 
-##### attackStructures.py Function
+##### attackStructures.py 
 This detects if troops are on enemy structues and deals damage to those structures.
 
 ##### battles.py
