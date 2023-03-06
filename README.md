@@ -31,7 +31,7 @@ For each turn the players have the ability to do the following
 
 
 ### File breakdown
-##### Main.py Function
+##### main.py Function
 The game runs entirely on this file and calls from functions from all other files. This contains functions to update troops and initialize player properties and race selections.
 
 ##### mapChecker.py Function
