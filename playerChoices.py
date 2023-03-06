@@ -1,6 +1,6 @@
 #This file will be the player buying stuff and moving troops
 
-from mapChecker import get_game_grid, check_build_noncommand_structures, check_build_command_structure, check_home_base_build_structure, check_player_troops
+from mapChecker import get_game_grid, check_mineral_buildings, check_troop_buildings
 from resourceChecker import check_enough_minerals, check_enough_space
 from battles import is_there_conflict, battle
 from moveAndPrint import choose_troop_movements, print_race
@@ -15,8 +15,6 @@ def main():
     #Below initializes the troop map setup
     player1_troops = []
     player2_troops = []
-
-    print(player1_troops)
 
     #Below initializes player starting configurations
     #Index 0 - Name
@@ -74,6 +72,7 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
 
 
     def player_turn(player_config, race_choice, player_choice, map):
+        print()
         print(player_config[0] + ", currently you have " + str(player_config[1]) + " minerals and have room to build " + str(player_config[2]) + " more troops!")
 
         #Create a temporary list to keep track of troops player would like to buy this turn
@@ -142,9 +141,9 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         elif len(new_troops) == 1 and which_player == "P2":
             for troop in range(len(new_troops)):
                 new_troops[troop][5] = 0 
-                new_troops[troop][6] = -1
+                new_troops[troop][6] = 9
                 new_troops[troop][7] = 0
-                new_troops[troop][8] = -1
+                new_troops[troop][8] = 9
         elif len(new_troops) > 1 and which_player == "P1":
 
             #here we are adding the troops current location in the 5th/6th index of the troop unit in the list of army
@@ -172,20 +171,20 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
             for troop in range(low, mid + 1):
 
                 new_troops[troop][5] = 0
-                new_troops[troop][6] = -1
+                new_troops[troop][6] = 9
                 new_troops[troop][7] = 0
-                new_troops[troop][8] = -1
+                new_troops[troop][8] = 9
 
                 new_troops[troop][5] = 0
-                new_troops[troop][6] = -1
+                new_troops[troop][6] = 9
                 new_troops[troop][7] = 0 
-                new_troops[troop][8] = -1 
+                new_troops[troop][8] = 9
 
             for troop in range(mid + 1, high):
                 new_troops[troop][5] = 1
-                new_troops[troop][6] = -1
+                new_troops[troop][6] = 9
                 new_troops[troop][7] = 1
-                new_troops[troop][8] = -1
+                new_troops[troop][8] = 9
     
         for troop in new_troops:
             player_troops.append(troop)
@@ -222,19 +221,22 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
 
 
     #The winner checker in this while loop is checking whether or not the persons starting 10 building have been destroyed, meaning if they have other bases out there but their starting base is destroyed, they lose the game!
-    while (game_map[0][0] != 0 or game_map[1][0] != 0 or game_map[2][0] != 0 or game_map[3][0] != 0 or game_map[4][0] != 0 or game_map[5][0] != 0 or game_map[6][0] != 0 or game_map[7][0] != 0 or game_map[8][0] != 0 or game_map[9][0] != 0) and (game_map[0][-1] != 0 or game_map[1][-1] != 0 or game_map[2][-1] != 0 or game_map[3][-1] != 0 or game_map[4][-1] != 0 or game_map[5][-1] != 0 or game_map[6][-1] != 0 or game_map[7][-1] != 0 or game_map[8][-1] != 0 or game_map[9][-1] != 0):
+    while (game_map[0][0] > 0 or game_map[1][0] > 0 or game_map[2][0] > 0 or game_map[3][0] > 0 or game_map[4][0] > 0 or game_map[5][0] > 0 or game_map[6][0] > 0 or game_map[7][0] > 0 or game_map[8][0] > 0 or game_map[9][0] > 0) and (game_map[0][-1] > 0 or game_map[1][-1] > 0 or game_map[2][-1] > 0 or game_map[3][-1] > 0 or game_map[4][-1] > 0 or game_map[5][-1] > 0 or game_map[6][-1] > 0 or game_map[7][-1] > 0 or game_map[8][-1] > 0 or game_map[9][-1] > 0):
         turn_count += 1
 
         #The turns will simulataneously be played in terms of response for game purposes, we will have player 1 go first
 
         #Map indexes for starting:
         # [0][0] and [1][0] are for troops
-        # [2][0] and [3][0] and [4][0] and [6][0] and [7][0] are just command center like buildings
+        # [2][0] and [3][0] and [4][0] and [5][0] and [6][0] and [7][0] are just command center like buildings
         # [8][0] and [9][0] are for troops
 
         #Here players recruit troops
-        newTroops_player1 = player_turn(player1_config, p1_choice, player1_troops, game_map)
-        newtroops_player2 = player_turn(player2_config, p2_choice, player2_troops, game_map)
+        #The check troop building structures ensures that at least 1 of the 4 barracks remains so the user can build troops
+        if check_troop_buildings(game_map, "P1") == True:
+            newTroops_player1 = player_turn(player1_config, p1_choice, player1_troops, game_map)
+        if check_troop_buildings(game_map, "P2") == True:
+            newtroops_player2 = player_turn(player2_config, p2_choice, player2_troops, game_map)
 
         #Here we add to troops to each of the players barracks that have been recruited
         add_troops_to_map(player1_troops, newTroops_player1, "P1")
@@ -242,37 +244,41 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
 
 
         #Test
-        print(player1_troops)
-    
-
+        #print(player1_troops)
 
 
         #Here we go to the battles.py file and see if there are any conflicts
         conflict_spots = is_there_conflict(player1_troops, player2_troops)
-        print(conflict_spots)
+        #print(conflict_spots)
 
         #If there are conflict spots the battle will be settled here
         if len(conflict_spots) > 0:
             for coords in conflict_spots:
-                battle(player1_troops, player2_troops, coords)
+                battle(player1_troops, player2_troops, coords, player1_config, player2_config)
 
         #NEXT STEP IS TO CHECK FOR BUILDINGS BEING DESTROYED
         check_buildings(game_map, player1_troops, "P1")
         check_buildings(game_map, player2_troops, "P2")
 
         #This is where players choose new coordinates for troops
-        choose_troop_movements(player1_troops, player1_config[0])
-        choose_troop_movements(player2_troops, player2_config[0])
+        if len(player1_troops) > 0:
+            choose_troop_movements(player1_troops, player1_config[0])
+        if len(player2_troops) > 0:
+            choose_troop_movements(player2_troops, player2_config[0])
 
         #Move troops by 1 'square' per move
         move_troops(player1_troops)
         move_troops(player2_troops)
 
 
-        #Just a test
-        print(player1_troops)
+        #Make a rule - +102 minerals added per round for command structures
+        #If all 6 troop buildings are destroyed, player can no longer build troops
+        #For each command center destroyed mineral output reduces by 17
+
+        player1_config[1] += check_mineral_buildings(game_map, "P1")
+        player2_config[1] += check_mineral_buildings(game_map, "P2")
     
-    
+
     #Declaring winner of the game
     if game_map[0][0] <= 0 and game_map[1][0] <= 0 and game_map[2][0] <= 0 and game_map[3][0] <= 0 and game_map[4][0] <= 0 and game_map[5][0] <= 0 and game_map[6][0] <= 0 and game_map[7][0] <= 0 and game_map[8][0] <= 0 and game_map[9][0] <= 0:
         print(player2_config[0] + " wins!")

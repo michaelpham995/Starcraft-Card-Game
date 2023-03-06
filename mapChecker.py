@@ -7,18 +7,52 @@ def get_game_grid():
 
     return map_array
 
-def check_build_noncommand_structures(map_array, xcoord, ycoord):
-    return (map_array[xcoord - 1][ycoord] == 75 or map_array[xcoord + 1][ycoord] == 75 or map_array[xcoord][ycoord - 1] == 75 or map_array[xcoord][ycoord + 1] == 75)
-    #Assuming that command center built at new base health is 75 and other new base buildings will be 50
+#Here we update how many minerals a player can receive next round based on their current structures that have not fallen
+def check_mineral_buildings(game_map, player):
+    mineral_producers_remaining = 0
+    if player == "P1":
+        if game_map[2][0] > 0:
+            mineral_producers_remaining += 1
+        if game_map[3][0] > 0:
+            mineral_producers_remaining += 1
+        if game_map[4][0] > 0:
+            mineral_producers_remaining += 1
+        if game_map[5][0] > 0:
+            mineral_producers_remaining += 1
+        if game_map[6][0] > 0:
+            mineral_producers_remaining += 1
+        if game_map[7][0] > 0:
+            mineral_producers_remaining += 1
 
-def check_build_command_structure(map_array, xcoord, ycoord):
-    return map_array[xcoord][ycoord] == -1
-    #-1 is the placeholder for new base structures
+    elif player == "P2":
+        if game_map[2][-1] > 0:
+            mineral_producers_remaining += 1
+        if game_map[3][-1] > 0:
+            mineral_producers_remaining += 1
+        if game_map[4][-1] > 0:
+            mineral_producers_remaining += 1
+        if game_map[5][-1] > 0:
+            mineral_producers_remaining += 1
+        if game_map[6][-1] > 0:
+            mineral_producers_remaining += 1
+        if game_map[7][-1] > 0:
+            mineral_producers_remaining += 1
 
-def check_home_base_build_structure(map_array, xcoord, ycoord):
-    return map_array[xcoord][ycoord] == -2
-    #-2 will be placeholderr for starting base structures that are destroyed
+    return (mineral_producers_remaining * 17)
 
+#This function is responsible for checking if a player has an active barracks to recruit troops
+def check_troop_buildings(game_map, player):
+    if player == "P1":
+        if game_map[0][0] > 0 or game_map[1][0] > 0 or game_map[8][0] > 0 or game_map[9][0] > 0:
+            return True
+        else:
+            return False
+
+    elif player == "P2":
+        if game_map[0][-1] > 0 or game_map[1][-1] > 0 or game_map[8][-1] > 0 or game_map[9][-1] > 0:
+            return True
+        else:
+            return False
     
 
 #Unfinished function

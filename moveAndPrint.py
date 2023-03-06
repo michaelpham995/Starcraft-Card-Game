@@ -1,5 +1,6 @@
 #This function will allow user to choose new coordinates for troops to move towards
 def choose_troop_movements(army, name):
+    print()
     print(str(name) + " here are your troops you can move!")
     print()
 

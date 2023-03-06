@@ -15,7 +15,7 @@ def is_there_conflict(p1_map, p2_map):
     return conflict_squares
 
 #This function handles battles present on the map
-def battle(army1, army2, coords):
+def battle(army1, army2, coords, config1, config2):
 
     army1_present = []
     army2_present = []
@@ -36,6 +36,7 @@ def battle(army1, army2, coords):
     if len(army1_present) > 0 and len(army2_present) > 0:
         winner, survivors = fight(army1_present, army2_present, army1, army2) 
 
+
     #Call the update_army function to update the armies for later rounds
     if winner == "A1":
         army1, army2 = update_army(winner, survivors, army1, army2, coords)
@@ -44,6 +45,9 @@ def battle(army1, army2, coords):
     else:
         army1, army2 = update_losers(army1, army2, coords)
     
+    #Update player configurations for army size
+    config1[2], config2[2] = 25 - len(army1), 25 - len(army2)
+
     return army1, army2
 
 
@@ -143,5 +147,3 @@ def update_losers(army1, army2, coords):
     army2 = [x for x in army2 if x[2] != "dead"]   
     
     return army1, army2
-
-
