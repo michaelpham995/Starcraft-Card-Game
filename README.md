@@ -51,4 +51,4 @@ This file detects coordinates where battles transpires on the map. Automatically
 
 
 ### Looking into the Future
-In the future I want to add troop visualization and detection that will allow troops to change the direction they are moving in based upon nearby opponents. In addition to this I am currently learn React and would like to build a web application that hosts this game and uses graphics to display it!
+In the future I want to add troop visualization and detection that will allow troops to change the direction they are moving in based upon nearby opponents. In addition to this I am currently learning React and would like to build a web application that hosts this game and uses graphics to display it!
