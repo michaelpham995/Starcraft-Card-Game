@@ -208,8 +208,8 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
                     unit[-4] += 1
                     unit[-3] += 1
                 elif ydiff > 0 and xdiff < 0:
-                    unit[-3] -= 1
-                    unit[-4] += 1
+                    unit[-3] += 1
+                    unit[-4] -= 1
                 elif ydiff < 0 and xdiff > 0:
                     unit[-4] += 1
                     unit[-3] -= 1
@@ -253,7 +253,7 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
         #If there are conflict spots the battle will be settled here
         if len(conflict_spots) > 0:
             for coords in conflict_spots:
-                battle(player1_troops, player2_troops, coords, player1_config, player2_config)
+                player1_troops, player2_troops = battle(player1_troops, player2_troops, coords, player1_config, player2_config)
 
         #NEXT STEP IS TO CHECK FOR BUILDINGS BEING DESTROYED
         check_buildings(game_map, player1_troops, "P1")
@@ -280,8 +280,10 @@ def game(player1_config, player2_config, p1_choice, p2_choice, player1_troops, p
 
     #Declaring winner of the game
     if game_map[0][0] <= 0 and game_map[1][0] <= 0 and game_map[2][0] <= 0 and game_map[3][0] <= 0 and game_map[4][0] <= 0 and game_map[5][0] <= 0 and game_map[6][0] <= 0 and game_map[7][0] <= 0 and game_map[8][0] <= 0 and game_map[9][0] <= 0:
+        print()
         print(player2_config[0] + " wins!")
     elif game_map[0][-1] <= 0 and game_map[1][-1] <= 0 and game_map[2][-1] <= 0 and game_map[3][-1] <= 0 and game_map[4][-1] <= 0 and game_map[5][-1] <= 0 and game_map[6][-1] <= 0 and game_map[7][-1] <= 0 and game_map[8][-1] <= 0 and game_map[9][-1] <= 0:
+        print()
         print(player1_config[0] + " wins!")
     else:
         print("Something went wrong")

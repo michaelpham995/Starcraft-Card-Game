@@ -19,7 +19,7 @@ def choose_troop_movements(army, name):
         while troop_to_move.isnumeric() != True:
             troop_to_move = input("Please enter the index of the troop you want to move! ")
         while int(troop_to_move) < 0 or int(troop_to_move) >= len(army):
-            troop_to_move = input("Please enter an index between 0 and " + str(len(army) - 1))
+            troop_to_move = input("Please enter an index between 0 and " + str(len(army) - 1) + "! ")
         
         #Choose x coordinate
         x_axis = input("Please enter the x coordinate between 0 and 9! ")
